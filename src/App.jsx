@@ -4,6 +4,10 @@ import { useState } from "react";
 import s from "./style.module.css"
 import { BACKDROP_BASE_URL } from "./config";
 import { TVShowAPI } from "./api/tv-show";
+import { TVShowDetail } from "./components/TVShowDetail/TVShowDetail";
+import { Logo } from "./components/Logo/Logo";
+import logo from "./assets/images/logo.png"
+import { TVShowListItem } from "./components/TVShowListItem/TVShowListItem";
 
 export function App (){
 
@@ -27,16 +31,17 @@ export function App (){
             <div className={s.header}>
                 <div className="row">
                     <div className="col-4">
-                        <div>Logo</div>
-                        <div>Subtitle</div>
+                        <Logo image={logo} title={"Cyriz"} subtitle={"My personal series advisor"}/>
                     </div>
                     <div className="col-sm-12 col-md-4">
-                        <input type="text" />
+                        <input className={s.search_bar} type="text" />
                     </div>
                 </div>
             </div>
-            <div className={s.tv_show_detail}>Detail</div>
-            <div className={s.recommendations}>Recommendations</div>
+            <div className={s.tv_show_detail}>
+                {currentTVShow && <TVShowDetail tvShow={currentTVShow} />}
+            </div>
+            <div className={s.recommendations}>{currentTVShow && <TVShowListItem tvShow={currentTVShow} />}</div>
         </div>
     )
 }
