@@ -1,6 +1,7 @@
 .container {
     cursor:pointer;
     width: 300px;
+    position: relative;
 }
 
 .img {
@@ -20,4 +21,5 @@
     border-bottom-right-radius: 10px;
     text-overflow: ellipsis;
     overflow: hidden;
+    white-space : nowrap;
 }
