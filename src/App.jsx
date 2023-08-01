@@ -9,6 +9,7 @@ import { Logo } from "./components/Logo/Logo";
 import logo from "./assets/images/logo.png";
 import { TVShowListItem } from "./components/TVShowListItem/TVShowListItem";
 import { TVShowList } from "./components/TVShowList/TVShowList";
+import { SearchBar } from "./components/SearchBar/SearchBar";
 
 TVShowAPI.fetchRecommendations(1402);
 export function App() {
@@ -16,17 +17,38 @@ export function App() {
   const [recommendationList, setRecommendationList] = useState([]);
 
   async function fetchPopulars() {
-    const populars = await TVShowAPI.fetchPopulars();
+    try {
+      const populars = await TVShowAPI.fetchPopulars();
+  
+      if (populars.length > 0) {
+        setCurrentTVShow(populars[0]);
+      }
 
-    if (populars.length > 0) {
-      setCurrentTVShow(populars[0]);
+    } catch (error){
+      alert("We couldn't reach the server to get the most popular TV show");
     }
   }
   async function fetchRecommendations(tvShowId) {
-    const recommendations = await TVShowAPI.fetchRecommendations(tvShowId);
+    try {
+      const recommendations = await TVShowAPI.fetchRecommendations(tvShowId);
+  
+      if (recommendations.length > 0) {
+        setRecommendationList(recommendations.slice(0, 10));
+      }
+    } catch (error){
+      alert("We couldn't reach the server to get the recommendations");
+    }
+  }
 
-    if (recommendations.length > 0) {
-      setRecommendationList(recommendations.slice(0, 10));
+  async function searchTVShow(TVShowName){
+    const searchResponse = await TVShowAPI.fetchByTitle(TVShowName);
+    if(searchResponse.length > 0){
+      try {
+        setCurrentTVShow(searchResponse[0]);
+      } catch (error){
+        alert("We couldn't reach the server to get the series you are looking for");
+      }
+
     }
   }
 
@@ -39,7 +61,7 @@ export function App() {
       fetchRecommendations(currentTVShow.id);
     }
   }, [currentTVShow]);
-  console.log(recommendationList);
+
   function setCurrentTvShowFromRecommendation(tvShow) {
     alert(JSON.stringify(tvShow));
   }
@@ -63,7 +85,7 @@ export function App() {
             />
           </div>
           <div className="col-sm-12 col-md-4">
-            <input className={s.search_bar} type="text" />
+            <SearchBar onSubmit={searchTVShow} />
           </div>
         </div>
       </div>
@@ -72,7 +94,7 @@ export function App() {
       </div>
       <div className={s.recommendations}>
         {recommendationList && recommendationList.length > 0 && (
-          <TVShowList tvShowList={recommendationList} />
+          <TVShowList tvShowList={recommendationList} onClickItem={setCurrentTVShow} />
         )}
       </div>
     </div>
