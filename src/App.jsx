@@ -7,7 +7,6 @@ import { TVShowAPI } from "./api/tv-show";
 import { TVShowDetail } from "./components/TVShowDetail/TVShowDetail";
 import { Logo } from "./components/Logo/Logo";
 import logo from "./assets/images/logo.png";
-import { TVShowListItem } from "./components/TVShowListItem/TVShowListItem";
 import { TVShowList } from "./components/TVShowList/TVShowList";
 import { SearchBar } from "./components/SearchBar/SearchBar";
 
@@ -19,36 +18,43 @@ export function App() {
   async function fetchPopulars() {
     try {
       const populars = await TVShowAPI.fetchPopulars();
-  
+
       if (populars.length > 0) {
         setCurrentTVShow(populars[0]);
       }
-
-    } catch (error){
-      alert("We couldn't reach the server to get the most popular TV show");
+    } catch (error) {
+      alert(
+        "We couldn't reach the server to get the most popular TV show :" +
+          error.message
+      );
     }
   }
   async function fetchRecommendations(tvShowId) {
     try {
       const recommendations = await TVShowAPI.fetchRecommendations(tvShowId);
-  
+
       if (recommendations.length > 0) {
         setRecommendationList(recommendations.slice(0, 10));
       }
-    } catch (error){
-      alert("We couldn't reach the server to get the recommendations");
+    } catch (error) {
+      alert(
+        "We couldn't reach the server to get the recommendations :" +
+          error.message
+      );
     }
   }
 
-  async function searchTVShow(TVShowName){
+  async function searchTVShow(TVShowName) {
     const searchResponse = await TVShowAPI.fetchByTitle(TVShowName);
-    if(searchResponse.length > 0){
+    if (searchResponse.length > 0) {
       try {
         setCurrentTVShow(searchResponse[0]);
-      } catch (error){
-        alert("We couldn't reach the server to get the series you are looking for");
+      } catch (error) {
+        alert(
+          "We couldn't reach the server to get the series you are looking for :" +
+            error.message
+        );
       }
-
     }
   }
 
@@ -61,10 +67,6 @@ export function App() {
       fetchRecommendations(currentTVShow.id);
     }
   }, [currentTVShow]);
-
-  function setCurrentTvShowFromRecommendation(tvShow) {
-    alert(JSON.stringify(tvShow));
-  }
 
   return (
     <div
@@ -94,7 +96,10 @@ export function App() {
       </div>
       <div className={s.recommendations}>
         {recommendationList && recommendationList.length > 0 && (
-          <TVShowList tvShowList={recommendationList} onClickItem={setCurrentTVShow} />
+          <TVShowList
+            tvShowList={recommendationList}
+            onClickItem={setCurrentTVShow}
+          />
         )}
       </div>
     </div>
