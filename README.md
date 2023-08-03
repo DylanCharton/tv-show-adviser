@@ -1,1 +1,5 @@
-My first app with React, a TV show advisor that will show suggestions of series. Nothing more complicated.
+To work properly, you'll need these environment variables :
+
+REACT_APP_API_KEY_PARAM
+
+(in your .env)
