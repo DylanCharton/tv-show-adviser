@@ -14,3 +14,7 @@
     border-color: transparent;
     padding : 18px 18px 18px 50px
 }
+
+::placeholder {
+    color : rgba(233, 233, 233, 0.684);
+}
